@@ -1,9 +1,9 @@
 const express =require('express');
 const app=express()
-app.use((req, res, next) => {
-    res.status(200).json({
-        message: 'working'
-    });
-});
+
+const hotels=require('./api/routes/hotels')
+
+
+app.use('/hotels',hotels);
 
 module.exports=app
