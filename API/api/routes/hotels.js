@@ -1,12 +1,11 @@
 const express = require('express');
 const Papa = require('../papaparse.min.js');
 const fs=require('fs');
-const path=require('path');
 const config ={
     header: true, 
     dynamicTyping: true, 
     skipEmptyLines:true,
-    preview:2,
+    preview:10,
     // download:true,
     /*uncomment this to do replace null values with whitespace string */
     // transform: (value) => {
@@ -14,12 +13,10 @@ const config ={
     //     else { return value }
     // },
 }
+
 const router = express.Router();
 
-// const csv = require(path.join(__dirname, '../../test.js'))
-console.log(process.cwd())
 
-console.log(path.join(__dirname, '../../test.js'))
 
 
 let papa
@@ -28,19 +25,23 @@ console.log(papa)
 // const papa = Papa.parse(data, config);
 
 // const sub = csv.forEach((element) => { console.log('first',element.split(',')) })
+
+
 router.get('/', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.status(200).json({
-        message: 'working',
-        value: papa.data,
-        fields: papa.meta.fields
+        result: papa.data,
+        rowNames: papa.meta.fields
     });
 });
 
 router.get('/:hotelName', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     const hotelName = req.params.hotelName;
     res.status(200).json({
-        message: 'hotel name',
-        value: hotelName
+         hotelName
     });
 });
 
