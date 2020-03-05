@@ -1,3 +1,18 @@
+# API-and-Charts-using-React
+To test this project:
+```sh
+cd API
+npm i 
+npm start
+```
+then:
+```sh
+cd dashboard
+npm i 
+npm start
+```
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
