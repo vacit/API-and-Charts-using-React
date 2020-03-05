@@ -1,0 +1,25 @@
+import React from 'react';
+import ReactEcharts from 'echarts-for-react';
+const LineChart = (props) => {
+
+
+    return (
+        <div>
+            <ReactEcharts
+                option={props}
+                notMerge={true}
+                lazyUpdate={true}
+                // theme={'dark'}
+                // showLoading ={true}
+                style={{height: '300px', width: '100%'}}
+                // onChartReady={this.onChartReadyCallback}
+            // onEvents={EventsDict}
+            // opts={}
+            />
+           
+        </div>
+    );
+
+}
+
+export default LineChart;
