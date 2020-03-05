@@ -11,7 +11,7 @@ const LineChart = (props) => {
                 lazyUpdate={true}
                 // theme={'dark'}
                 // showLoading ={true}
-                style={{height: '300px', width: '100%'}}
+                style={{height: '400px', width: '100%'}}
                 // onChartReady={this.onChartReadyCallback}
             // onEvents={EventsDict}
             // opts={}

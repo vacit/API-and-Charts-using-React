@@ -1,11 +1,11 @@
 const express = require("express");
-const Papa = require("../papaparse.min.js");
+const PaParser = require("../papaparse.min.js");
 const fs = require("fs");
 const config = {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,
-    preview: 20,
+    // preview: 20,
     // download:true,
     /*uncomment this to do replace null values with whitespace string */
     // transform: (value) => {
@@ -18,19 +18,11 @@ const router = express.Router();
 
 let papa;
 fs.readFile("./hotellist.csv", "utf8", (error, data) => {
-    papa = Papa.parse(data, config);
+    papa = PaParser.parse(data, config);
 });
-// console.log(papa)
-// const papa = Papa.parse(data, config);
 
-// const sub = csv.forEach((element) => { console.log('first',element.split(',')) })
 
-const localizePrice = number => {
-    return number.toLocaleString('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
-};
+
 
 const getFieldValues = (data, field) => {
     let values = [];
@@ -38,12 +30,18 @@ const getFieldValues = (data, field) => {
     let currentValue;
     data.forEach(obj => {
         currentValue = obj[field]
-        // console.log(currentValue)
         if (currentValue && currentValue.includes(',')) {
-            formattedValue = localizePrice(currentValue);
+
+            formattedValue = parseFloat(currentValue.replace(/,/g, '.'));
+
             values.push(formattedValue);
         }
-        else values.push(currentValue);
+        else
+            values.push(currentValue);
+
+        // if(currentValue===null){
+        //     console.log(obj.field);
+        // }
     });
     return values;
 };
