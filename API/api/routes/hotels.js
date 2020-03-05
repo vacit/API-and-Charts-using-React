@@ -5,7 +5,7 @@ const config = {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,
-    preview: 10,
+    // preview: 10,
     // download:true,
     /*uncomment this to do replace null values with whitespace string */
     // transform: (value) => {
