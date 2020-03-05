@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import LineChart from './charts/LineChart';
-import { getData } from './helpers'
-import PieChart, { option } from './charts/PieChart'
+import { getData } from './helpers';
+import PieChart from './charts/PieChart';
+
 
 class App extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class App extends Component {
         this.state = {
             optionOne: {},
             optionTwo: {},
+            pieOption: {},
             data: {},
 
         }
@@ -41,13 +43,71 @@ class App extends Component {
         }
     }
 
+    getPieOption = (names, commentCount) => {
+        let legendData = [];
+        let seriesData = [];
+        let selected = {};
+        names.map((name, index) => {
+            legendData.push(name);
+            seriesData.push({
+                name: name,
+                value: commentCount[index]
+            });
+            selected[name] = index < 10;
+
+        });
+        return {
+            legendData,
+            seriesData,
+            selected
+        };
+
+    }
+    option = {
+        title: {
+            text: 'Statistics of Hotels Comments',
+            subtext: 'How many comment every hotel has',
+            left: 'left'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b} : ({d}%) <br/> Comment : {c} ',
+        },
+        legend: {
+            type: 'scroll',
+            orient: 'vertical',
+            right: 10,
+            top: 20,
+            bottom: 20,
+            data: [],
+
+            selected: {}
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '80%',
+                center: ['40%', '50%'],
+                data: [],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
     componentDidMount() {
-        getData('hotelname,baseprice').then((data) => {
+        getData('hotelname,baseprice,commentcount').then((data) => {
             const names = data.result.hotelname;
             const basePrice = data.result.baseprice;
+            const commentCount = data.result.commentcount;
             const { uniqueNames, uniqueCount } = this.getDistribution(names);
             // console.log(names, basePrice, uniqueCount, data)
-
+            const pieOption = this.getPieOption(uniqueNames, uniqueCount)
+            console.log(pieOption)
             //#region 
             this.setState({
                 optionOne: {
@@ -123,6 +183,20 @@ class App extends Component {
                         }
                     ]
                 },
+                pieOption: {
+                    ...this.option,
+                    legend: {
+                        ...this.option.legend,
+                        data: pieOption.legendData,
+                        selected: pieOption.selected
+                    },
+                    series: [
+                        {
+                            ...this.option.series[0],
+                            data: pieOption.seriesData,
+                        }
+                    ]
+                },
                 data,
             })
             //#endregion
@@ -134,9 +208,9 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App" >
+            <div style={{'padding':'20px'}} className="App" >
                 <header className="App-header">
-                    <PieChart {...option}></PieChart>
+                    <PieChart {...this.state.pieOption}></PieChart>
                     <LineChart {...this.state.optionTwo}></LineChart>
                     <LineChart {...this.state.optionOne}></LineChart>
                 </header>

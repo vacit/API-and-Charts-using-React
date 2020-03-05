@@ -3,14 +3,14 @@ import ReactEcharts from 'echarts-for-react';
 
 const LineChart = (props) => {
     return (
-        <div>
-            <ReactEcharts
+        <div >
+            <ReactEcharts 
                 option={props}
                 notMerge={true}
                 lazyUpdate={true}
                 // theme={'dark'}
                 // showLoading ={true}
-                style={{ height: '400px', width: '100%' }}
+                style={{ height: '400px' }}
             // onChartReady={this.onChartReadyCallback}
             // onEvents={EventsDict}
             // opts={}

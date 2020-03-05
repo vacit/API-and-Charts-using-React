@@ -5,7 +5,7 @@ const config = {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,
-    // preview: 20,
+    // preview: 2000,
     // download:true,
     /*uncomment this to do replace null values with whitespace string */
     // transform: (value) => {
@@ -30,7 +30,8 @@ const getFieldValues = (data, field) => {
     let currentValue;
     data.forEach(obj => {
         currentValue = obj[field]
-        if (currentValue && currentValue.includes(',')) {
+        // console.log(currentValue)
+        if (currentValue && currentValue.toString().includes(',')) {
 
             formattedValue = parseFloat(currentValue.replace(/,/g, '.'));
 
