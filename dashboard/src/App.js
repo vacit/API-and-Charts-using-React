@@ -9,27 +9,9 @@ class App extends Component {
             optionOne: {},
             optionTwo: {},
             data: {},
-            names: [],
-            values: [],
+
         }
     }
-
-    // fetchData = () => {
-    //     let options = {
-    //         names: [],
-    //         bestPrice: []
-    //     }
-    //     return getData().then((data) => {
-    //         const result = data.result;
-
-    //         result.forEach(obj => {
-    //             options.names = [...options.names, obj.hotelname]
-    //             options.bestPrice = [...options.bestPrice, obj.bestbaseprice]
-    //         });
-    //         return options;
-    //     })
-    // }
-
 
 
     getNames = data => {
@@ -43,8 +25,8 @@ class App extends Component {
 
     hotelsCount = data => {
         // let hotelsCount = {};
-        let hotelsCount = [];
-        let hotelsNames = [];
+        let uniqueNames = [];
+        let uniqueCount = [];
 
         const distribution = data.reduce((acum, cur) => Object.assign(acum, { [cur]: (acum[cur] | 0) + 1 }), {});
         // console.log(distribution);
@@ -52,15 +34,15 @@ class App extends Component {
         for (let el in distribution) {
             // console.log(distribution[el])
             if (distribution[el] > 20) {
-                hotelsNames.push(el)
-                hotelsCount.push(distribution[el])
+                uniqueNames.push(el)
+                uniqueCount.push(distribution[el])
             }
         }
-        console.log(hotelsNames, hotelsCount)
+        // console.log(hotelsNames, hotelsCount)
         // console.log(distribution)
         return {
-            hotelsNames,
-            hotelsCount
+            uniqueNames,
+            uniqueCount
         }
     }
     // getUniqCount = data => {
@@ -74,12 +56,12 @@ class App extends Component {
         // console.log(data.result)
 
         getData('hotelname,baseprice').then((data) => {
-            const names2 = data.result.hotelname;
-            const values2 = data.result.baseprice;
+            const names = data.result.hotelname;
+            const basePrice = data.result.baseprice;
 
-            const { hotelsNames, hotelsCount } = this.hotelsCount(names2)
+            const { uniqueNames, uniqueCount } = this.hotelsCount(names);
 
-            // console.log(names2, values2)
+            console.log(names, basePrice)
 
             //#region 
             this.setState({
@@ -87,7 +69,7 @@ class App extends Component {
                     xAxis: {
 
                         type: 'category',
-                        data: hotelsNames,
+                        data: names,
                         axisTick: {
                             alignWithLabel: true
                         },
@@ -101,11 +83,11 @@ class App extends Component {
                     },
                     yAxis: {
                         type: 'value',
-                        data: hotelsCount,
+                        // data: values2,
                         // scale:true,
                     },
                     series: [{
-                        data: hotelsCount,
+                        data: basePrice,
                         type: 'line'
                     }]
                 },
@@ -141,7 +123,7 @@ class App extends Component {
                         nameLocation: 'center',
                         type: 'category',
                         // boundaryGap: false,
-                        data: hotelsNames,
+                        data: uniqueNames,
 
                         // axisTick: {
                         //     alignWithLabel: true
@@ -212,7 +194,7 @@ class App extends Component {
                             name: 'Repetition',
                             type: 'line',
                             smooth: true,
-                            data: hotelsCount,
+                            data: uniqueCount,
                             areaStyle: {
                                 color: 'green'
                             }
@@ -231,8 +213,6 @@ class App extends Component {
                     ]
                 },
                 data,
-                names: hotelsNames,
-                values: hotelsCount
             })
         })
         //#endregion
@@ -246,7 +226,7 @@ class App extends Component {
         return (
             <div className="App" >
                 <header className="App-header">
-                    {/* <LineChart {...this.state.optionOne}></LineChart> */}
+                    <LineChart {...this.state.optionOne}></LineChart>
                     <LineChart {...this.state.optionTwo}></LineChart>
                 </header>
             </div>

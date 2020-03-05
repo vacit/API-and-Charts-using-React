@@ -16,7 +16,7 @@ const LineChart = (props) => {
             // onEvents={EventsDict}
             // opts={}
             />
-           
+           <br/>
         </div>
     );
 

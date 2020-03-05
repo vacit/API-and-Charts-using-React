@@ -5,7 +5,7 @@ const config = {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,
-    // preview: 10,
+    preview: 20,
     // download:true,
     /*uncomment this to do replace null values with whitespace string */
     // transform: (value) => {
@@ -24,10 +24,26 @@ fs.readFile("./hotellist.csv", "utf8", (error, data) => {
 // const papa = Papa.parse(data, config);
 
 // const sub = csv.forEach((element) => { console.log('first',element.split(',')) })
+
+const localizePrice = number => {
+    return number.toLocaleString('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
+};
+
 const getFieldValues = (data, field) => {
     let values = [];
+    let formattedValue;
+    let currentValue;
     data.forEach(obj => {
-        values.push(obj[field]);
+        currentValue = obj[field]
+        // console.log(currentValue)
+        if (currentValue && currentValue.includes(',')) {
+            formattedValue = localizePrice(currentValue);
+            values.push(formattedValue);
+        }
+        else values.push(currentValue);
     });
     return values;
 };
