@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LineChart from './charts/LineChart';
 import { getData } from './helpers'
+import PieChart, { option } from './charts/PieChart'
 
 class App extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class App extends Component {
     }
 
 
-    hotelsCount = data => {
+    getDistribution = data => {
         let uniqueNames = [];
         let uniqueCount = [];
 
@@ -44,8 +45,8 @@ class App extends Component {
         getData('hotelname,baseprice').then((data) => {
             const names = data.result.hotelname;
             const basePrice = data.result.baseprice;
-            const { uniqueNames, uniqueCount } = this.hotelsCount(names);
-            // console.log(names, basePrice,uniqueCount)
+            const { uniqueNames, uniqueCount } = this.getDistribution(names);
+            // console.log(names, basePrice, uniqueCount, data)
 
             //#region 
             this.setState({
@@ -92,7 +93,7 @@ class App extends Component {
                     },
 
                     xAxis: {
-                        
+
                         nameLocation: 'center',
                         type: 'category',
                         data: uniqueNames,
@@ -124,8 +125,9 @@ class App extends Component {
                 },
                 data,
             })
+            //#endregion
         })
-        //#endregion
+
 
     }
 
@@ -134,6 +136,7 @@ class App extends Component {
         return (
             <div className="App" >
                 <header className="App-header">
+                    <PieChart {...option}></PieChart>
                     <LineChart {...this.state.optionTwo}></LineChart>
                     <LineChart {...this.state.optionOne}></LineChart>
                 </header>

@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
+
 const LineChart = (props) => {
-
-
     return (
         <div>
             <ReactEcharts
@@ -11,12 +10,12 @@ const LineChart = (props) => {
                 lazyUpdate={true}
                 // theme={'dark'}
                 // showLoading ={true}
-                style={{height: '400px', width: '100%'}}
-                // onChartReady={this.onChartReadyCallback}
+                style={{ height: '400px', width: '100%' }}
+            // onChartReady={this.onChartReadyCallback}
             // onEvents={EventsDict}
             // opts={}
             />
-           <br/>
+            <br />
         </div>
     );
 
