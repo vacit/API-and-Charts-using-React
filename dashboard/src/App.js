@@ -4,7 +4,6 @@ import { getData } from './helpers';
 import PieChart from './charts/PieChart';
 import { pieBaseObj } from './optionObjects/pieBaseObj';
 import { lineBaseObj } from './optionObjects/lineBaseObj';
-var FileSaver = require('file-saver');
 class App extends Component {
     constructor(props) {
         super(props);
@@ -73,9 +72,7 @@ class App extends Component {
         const { uniqueNames, uniqueCount } = this.getDistribution(names);
         // console.log(names, basePrice, uniqueCount, data)
         const pieOption = this.getPieOption(uniqueNames, uniqueCount)
-        //     console.log(pieOption)
-        //     var blob = new Blob([pieOption.selected[Object.keys(pieOption.selected)[0]],'\n\n\n\n\n\n\n\n\n',pieOption.selected[Object.keys(pieOption.selected)[1]]], { type: "text/plain;charset=utf-8" });
-        //    FileSaver.saveAs(blob, "hello world.txt");
+       
 
         //#region 
         this.setState({
