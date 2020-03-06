@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import LineChart from './charts/LineChart';
 import { getData } from './helpers';
 import PieChart from './charts/PieChart';
-import { pieBaseObj } from './optionObjects/pieBaseObj'
-import { lineBaseObj } from './optionObjects/lineBaseObj'
-
+import { pieBaseObj } from './optionObjects/pieBaseObj';
+import { lineBaseObj } from './optionObjects/lineBaseObj';
+var FileSaver = require('file-saver');
 class App extends Component {
     constructor(props) {
         super(props);
@@ -66,74 +66,77 @@ class App extends Component {
     }
 
     componentDidMount() {
-        getData('hotelname,baseprice,commentcount').then((data) => {
-            const names = data.result.hotelname;
-            const basePrice = data.result.baseprice;
-            const commentCount = data.result.commentcount;
-            const { uniqueNames, uniqueCount } = this.getDistribution(names);
-            // console.log(names, basePrice, uniqueCount, data)
-            const pieOption = this.getPieOption(uniqueNames, uniqueCount)
-            console.log(pieOption)
-            //#region 
-            this.setState({
-                pieOption: {
-                    ...pieBaseObj,
-                    legend: {
-                        ...pieBaseObj.legend,
-                        data: pieOption.legendData,
-                        selected: pieOption.selected
-                    },
-                    series: [
-                        {
-                            ...pieBaseObj.series[0],
-                            data: pieOption.seriesData,
-                        }
-                    ]
+        const data = getData('hotelname,baseprice,commentcount')
+        const names = data.result.hotelname;
+        const basePrice = data.result.baseprice;
+        const commentCount = data.result.commentcount;
+        const { uniqueNames, uniqueCount } = this.getDistribution(names);
+        // console.log(names, basePrice, uniqueCount, data)
+        const pieOption = this.getPieOption(uniqueNames, uniqueCount)
+        //     console.log(pieOption)
+        //     var blob = new Blob([pieOption.selected[Object.keys(pieOption.selected)[0]],'\n\n\n\n\n\n\n\n\n',pieOption.selected[Object.keys(pieOption.selected)[1]]], { type: "text/plain;charset=utf-8" });
+        //    FileSaver.saveAs(blob, "hello world.txt");
+
+        //#region 
+        this.setState({
+            pieOption: {
+                ...pieBaseObj,
+                legend: {
+                    ...pieBaseObj.legend,
+                    data: pieOption.legendData,
+                    selected: pieOption.selected
                 },
-                lineOption1: {
-                    ...lineBaseObj,
-                    xAxis: {
-                        ...lineBaseObj.xAxis,
-                        data: uniqueNames,
-                    },
-                    series: [
-                        {
-                            ...lineBaseObj.series[0],
-                            data: uniqueCount,
-                        }
-                    ]
+                series: [
+                    {
+                        ...pieBaseObj.series[0],
+                        data: pieOption.seriesData,
+                    }
+                ]
+            },
+            lineOption1: {
+                ...lineBaseObj,
+                xAxis: {
+                    ...lineBaseObj.xAxis,
+                    data: uniqueNames,
                 },
-                lineOption2: {
-                    title: {
-                        text: 'Base Price',
-                        subtext: 'Hotels base price in a sample search result'
-                    },
-                    xAxis: {
-
-                        type: 'category',
-                        data: names,
-                        axisTick: {
-                            alignWithLabel: true
-                        },
-                        axisLabel: {
-                            rotate: -90
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-
-                    },
-                    series: [{
-                        data: basePrice,
-                        type: 'line'
-                    }]
+                series: [
+                    {
+                        ...lineBaseObj.series[0],
+                        data: uniqueCount,
+                    }
+                ]
+            },
+            lineOption2: {
+                title: {
+                    text: 'Base Price',
+                    subtext: 'Hotels base price in a sample search result'
                 },
+                xAxis: {
+
+                    type: 'category',
+                    data: names,
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+                        rotate: -90
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+
+                },
+                series: [{
+                    data: basePrice,
+                    type: 'line'
+                }]
+            },
 
 
-                data,
-            })
-            //#endregion
+            data,
         })
+        //#endregion
+
 
 
     }
