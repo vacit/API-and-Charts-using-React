@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import LineChart from './charts/LineChart';
 import { getData } from './helpers';
 import PieChart from './charts/PieChart';
-
+import { pieBaseObj } from './optionObjects/pieBaseObj'
+import { lineBaseObj } from './optionObjects/lineBaseObj'
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            optionOne: {},
-            optionTwo: {},
             pieOption: {},
+            lineOption1: {},
+            lineOption2: {},
             data: {},
 
         }
@@ -63,42 +64,7 @@ class App extends Component {
         };
 
     }
-    option = {
-        title: {
-            text: 'Statistics of Hotels Comments',
-            subtext: 'How many comment every hotel has',
-            left: 'left'
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: '{b} : ({d}%) <br/> Comment : {c} ',
-        },
-        legend: {
-            type: 'scroll',
-            orient: 'vertical',
-            right: 10,
-            top: 20,
-            bottom: 20,
-            data: [],
 
-            selected: {}
-        },
-        series: [
-            {
-                type: 'pie',
-                radius: '80%',
-                center: ['40%', '50%'],
-                data: [],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
     componentDidMount() {
         getData('hotelname,baseprice,commentcount').then((data) => {
             const names = data.result.hotelname;
@@ -110,7 +76,38 @@ class App extends Component {
             console.log(pieOption)
             //#region 
             this.setState({
-                optionOne: {
+                pieOption: {
+                    ...pieBaseObj,
+                    legend: {
+                        ...pieBaseObj.legend,
+                        data: pieOption.legendData,
+                        selected: pieOption.selected
+                    },
+                    series: [
+                        {
+                            ...pieBaseObj.series[0],
+                            data: pieOption.seriesData,
+                        }
+                    ]
+                },
+                lineOption1: {
+                    ...lineBaseObj,
+                    xAxis: {
+                        ...lineBaseObj.xAxis,
+                        data: uniqueNames,
+                    },
+                    series: [
+                        {
+                            ...lineBaseObj.series[0],
+                            data: uniqueCount,
+                        }
+                    ]
+                },
+                lineOption2: {
+                    title: {
+                        text: 'Base Price',
+                        subtext: 'Hotels base price in a sample search result'
+                    },
                     xAxis: {
 
                         type: 'category',
@@ -131,72 +128,8 @@ class App extends Component {
                         type: 'line'
                     }]
                 },
-                optionTwo: {
-                    title: {
-                        text: 'Hotels distribution',
-                        subtext: 'Occurrence above 20 in the sample search result'
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            label: {
-                                show: false
-                            }
-                        },
-                        formatter: '{b0}<br /> Total: {c0} Entries found',
-                        position: function (pos, params, el, elRect, size) {
-                            var obj = { top: 60 };
-                            obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 80;
-                            return obj;
-                        },
-                    },
-
-                    xAxis: {
-
-                        nameLocation: 'center',
-                        type: 'category',
-                        data: uniqueNames,
 
 
-                        axisLabel: {
-                            show: false,
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                    },
-                    lineStyle: {
-                        color: 'green'
-                    },
-                    series: [
-                        {
-                            name: 'Repetition',
-                            type: 'line',
-                            smooth: true,
-                            data: uniqueCount,
-                            areaStyle: {
-                                color: 'green'
-                            }
-
-
-                        }
-                    ]
-                },
-                pieOption: {
-                    ...this.option,
-                    legend: {
-                        ...this.option.legend,
-                        data: pieOption.legendData,
-                        selected: pieOption.selected
-                    },
-                    series: [
-                        {
-                            ...this.option.series[0],
-                            data: pieOption.seriesData,
-                        }
-                    ]
-                },
                 data,
             })
             //#endregion
@@ -208,11 +141,11 @@ class App extends Component {
 
     render() {
         return (
-            <div style={{'padding':'20px'}} className="App" >
+            <div style={{ 'padding': '20px' }} className="App" >
                 <header className="App-header">
                     <PieChart {...this.state.pieOption}></PieChart>
-                    <LineChart {...this.state.optionTwo}></LineChart>
-                    <LineChart {...this.state.optionOne}></LineChart>
+                    <LineChart {...this.state.lineOption1}></LineChart>
+                    <LineChart {...this.state.lineOption2}></LineChart>
                 </header>
             </div>
         );
