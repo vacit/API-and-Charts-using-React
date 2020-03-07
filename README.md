@@ -1,4 +1,6 @@
-# API-and-Charts-using-React
+# API-and-Charts-using-React. Data visualization charts.
+## Live static version 👉 https://vacit.github.io/react-data-charts/
+
 To test this project:
 ```sh
 cd API
