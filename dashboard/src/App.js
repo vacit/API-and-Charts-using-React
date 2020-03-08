@@ -5,9 +5,15 @@ import { getData } from './helpers';
 import PieChart from './charts/PieChart';
 import { pieBaseObj } from './optionObjects/pieBaseObj';
 import { lineBaseObj } from './optionObjects/lineBaseObj';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom';
 import Login from './Login';
 import Nav from './Nav';
+import NotFound from './NotFound';
 
 class App extends Component {
   constructor(props) {
@@ -16,8 +22,12 @@ class App extends Component {
       pieOption: {},
       lineOption1: {},
       lineOption2: {},
-      data: {}
+      data: {},
+      loggedIn: false
     };
+    // this.name = 'test';
+    this.email = 'test@test.com';
+    this.password = 'test';
   }
 
   getNames = data => {
@@ -65,6 +75,21 @@ class App extends Component {
       seriesData,
       selected
     };
+  };
+
+  login = ({ email, password }) => {
+    if (
+      //   name === this.name &&
+      email === this.email &&
+      password === this.password
+    ) {
+      console.log('right info');
+      this.setState({
+        loggedIn: true
+      });
+    } else {
+      console.log('wrong info');
+    }
   };
 
   componentDidMount() {
@@ -143,7 +168,28 @@ class App extends Component {
         <div className='App'>
           <Nav></Nav>
           <Switch>
-            <Route path='/' exact component={Login} />
+            <Route
+              path='/'
+              exact
+              render={props => (
+                <Login
+                  {...props}
+                  login={this.login}
+                  loggedIn={this.state.loggedIn}
+                />
+              )}
+            />
+
+            <Route
+              path='/login'
+              render={props => (
+                <Login
+                  {...props}
+                  login={this.login}
+                  loggedIn={this.state.loggedIn}
+                />
+              )}
+            />
             <Route
               path='/piechart'
               render={props => (
@@ -153,15 +199,17 @@ class App extends Component {
             <Route
               path='/linechart1'
               render={props => (
-                <PieChart {...props} {...this.state.lineOption1} />
+                <LineChart {...props} {...this.state.lineOption1} />
               )}
             />
             <Route
               path='/linechart2'
               render={props => (
-                <PieChart {...props} {...this.state.lineOption2} />
+                <LineChart {...props} {...this.state.lineOption2} />
               )}
             />
+            <Route
+              component={NotFound}            />
           </Switch>
         </div>
       </Router>

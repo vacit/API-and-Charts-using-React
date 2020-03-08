@@ -4,7 +4,6 @@ import ReactEcharts from 'echarts-for-react';
 const PieChart = (props) => {
     return (
         <div>
-        { console.log('ssss')}
             <ReactEcharts
                 option={props}
                 notMerge={true}
