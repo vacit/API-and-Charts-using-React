@@ -14,6 +14,7 @@ import {
 import Login from './Login';
 import Nav from './Nav';
 import NotFound from './NotFound';
+import Logout from './Logout';
 
 class App extends Component {
   constructor(props) {
@@ -88,8 +89,14 @@ class App extends Component {
         loggedIn: true
       });
     } else {
-      console.log('wrong info');
+      alert('please enter correct email and password');
     }
+  };
+
+  logout = () => {
+    this.setState({
+      loggedIn: false
+    });
   };
 
   componentDidMount() {
@@ -100,7 +107,7 @@ class App extends Component {
       const { uniqueNames, uniqueCount } = this.getDistribution(names);
       // console.log(names, basePrice, uniqueCount, data)
       const pieOption = this.getPieOption(uniqueNames, uniqueCount);
-      console.log(pieOption);
+    //   console.log(pieOption);
       //#region setState
       this.setState({
         pieOption: {
@@ -168,7 +175,7 @@ class App extends Component {
         <div className='App'>
           <Nav></Nav>
           <Switch>
-            <Route
+            {/* <Route
               path='/'
               exact
               render={props => (
@@ -178,15 +185,29 @@ class App extends Component {
                   loggedIn={this.state.loggedIn}
                 />
               )}
-            />
+            /> */}
 
             <Route
               path='/login'
+              exact
               render={props => (
                 <Login
                   {...props}
                   login={this.login}
+                  logout={this.logout}
                   loggedIn={this.state.loggedIn}
+                />
+              )}
+            />
+            <Route
+              path='/logout'
+              exact
+              render={props => (
+                <Logout
+                  {...props}
+                //   login={this.login}
+                  logout={this.logout}
+                //   loggedIn={this.state.loggedIn}
                 />
               )}
             />
@@ -196,6 +217,7 @@ class App extends Component {
                 <PieChart {...props} {...this.state.pieOption} />
               )}
             />
+            <Route path='/logout' render={props => {}} />
             <Route
               path='/linechart1'
               render={props => (
@@ -208,8 +230,7 @@ class App extends Component {
                 <LineChart {...props} {...this.state.lineOption2} />
               )}
             />
-            <Route
-              component={NotFound}            />
+            <Route component={NotFound} />
           </Switch>
         </div>
       </Router>
