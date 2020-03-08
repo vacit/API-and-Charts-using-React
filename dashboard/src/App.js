@@ -14,7 +14,6 @@ import {
 import LoginPage from './Login';
 import Nav from './Nav';
 import NotFound from './NotFound';
-import Logout from './Logout';
 import PrivateRoute from './PrivateRouter';
 
 class App extends Component {
