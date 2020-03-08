@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import AuthButton from './AuthButton';
 function Nav(props) {
+  const authObj = props.authObj;
+
   return (
     <nav>
-      <Link to={'/login'}>Login</Link>
+      <AuthButton authObj={authObj}/>
+      {/* <Link to={'/login'}>Login</Link> */}
       {/* <Link to={'/home'}>Home</Link> */}
-      <Link
-        to={'/logout'}
-      >
-        log out
-      </Link>
-      <Link to={'/piechart'} >Pie Chart</Link>
+      {/* <Link to={'/logout'}>log out</Link> */}
+      <Link to={'/piechart'}>Pie Chart</Link>
       <Link to={'/linechart1'}>Line Chart One</Link>
       <Link to={'/linechart2'}>Line Chart Two</Link>
     </nav>

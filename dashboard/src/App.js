@@ -11,10 +11,11 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import Login from './Login';
+import LoginPage from './Login';
 import Nav from './Nav';
 import NotFound from './NotFound';
 import Logout from './Logout';
+import PrivateRoute from './PrivateRouter';
 
 class App extends Component {
   constructor(props) {
@@ -24,12 +25,23 @@ class App extends Component {
       lineOption1: {},
       lineOption2: {},
       data: {},
-      loggedIn: false
+      loggedIn: false,
+      isAuthenticated: false
     };
     // this.name = 'test';
     this.email = 'test@test.com';
     this.password = 'test';
   }
+  authenticate = () => {
+    this.setState({
+      isAuthenticated: true
+    });
+  };
+  signout = () => {
+    this.setState({
+      isAuthenticated: false
+    });
+  };
 
   getNames = data => {
     let names = [];
@@ -78,27 +90,6 @@ class App extends Component {
     };
   };
 
-  login = ({ email, password }) => {
-    if (
-      //   name === this.name &&
-      email === this.email &&
-      password === this.password
-    ) {
-      console.log('right info');
-      this.setState({
-        loggedIn: true
-      });
-    } else {
-      alert('please enter correct email and password');
-    }
-  };
-
-  logout = () => {
-    this.setState({
-      loggedIn: false
-    });
-  };
-
   componentDidMount() {
     getData('hotelname,baseprice,commentcount').then(data => {
       const names = data.result.hotelname;
@@ -107,7 +98,7 @@ class App extends Component {
       const { uniqueNames, uniqueCount } = this.getDistribution(names);
       // console.log(names, basePrice, uniqueCount, data)
       const pieOption = this.getPieOption(uniqueNames, uniqueCount);
-    //   console.log(pieOption);
+      //   console.log(pieOption);
       //#region setState
       this.setState({
         pieOption: {
@@ -170,66 +161,36 @@ class App extends Component {
   }
 
   render() {
+    const authObj = {
+      isAuthenticated: this.state.isAuthenticated,
+      authenticate: this.authenticate,
+      signout: this.signout
+    };
     return (
       <Router>
         <div className='App'>
-          <Nav></Nav>
+          <Nav authObj={authObj}></Nav>
           <Switch>
-            {/* <Route
-              path='/'
-              exact
-              render={props => (
-                <Login
-                  {...props}
-                  login={this.login}
-                  loggedIn={this.state.loggedIn}
-                />
-              )}
-            /> */}
+            <Route exact path='/'>
+              <LoginPage authObj={authObj} />
+            </Route>
 
-            <Route
-              path='/login'
-              exact
-              render={props => (
-                <Login
-                  {...props}
-                  login={this.login}
-                  logout={this.logout}
-                  loggedIn={this.state.loggedIn}
-                />
-              )}
-            />
-            <Route
-              path='/logout'
-              exact
-              render={props => (
-                <Logout
-                  {...props}
-                //   login={this.login}
-                  logout={this.logout}
-                //   loggedIn={this.state.loggedIn}
-                />
-              )}
-            />
-            <Route
-              path='/piechart'
-              render={props => (
-                <PieChart {...props} {...this.state.pieOption} />
-              )}
-            />
-            <Route path='/logout' render={props => {}} />
-            <Route
-              path='/linechart1'
-              render={props => (
-                <LineChart {...props} {...this.state.lineOption1} />
-              )}
-            />
-            <Route
-              path='/linechart2'
-              render={props => (
-                <LineChart {...props} {...this.state.lineOption2} />
-              )}
-            />
+            <Route path='/login'>
+              <LoginPage authObj={authObj} />
+            </Route>
+
+            <PrivateRoute authObj={authObj} path='/piechart'>
+              <PieChart {...this.state.pieOption} />
+            </PrivateRoute>
+
+            <PrivateRoute authObj={authObj} path='/linechart1'>
+              <LineChart {...this.state.lineOption1} />
+            </PrivateRoute>
+
+            <PrivateRoute authObj={authObj} path='/linechart2'>
+              <LineChart {...this.state.lineOption2} />
+            </PrivateRoute>
+
             <Route component={NotFound} />
           </Switch>
         </div>
