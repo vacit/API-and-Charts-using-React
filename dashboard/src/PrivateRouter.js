@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const PrivateRoute = (props) => {
-    const {authObj,children,...rest}=props
-    console.log(props)
+const PrivateRoute = props => {
+  const { authObj, children, ...rest } = props;
+  // console.log(props)
   return (
     <Route
-    {...rest}
+      {...rest}
       render={({ location }) =>
         authObj.isAuthenticated ? (
           children
@@ -22,4 +22,4 @@ const PrivateRoute = (props) => {
     />
   );
 };
-export default PrivateRoute
+export default PrivateRoute;

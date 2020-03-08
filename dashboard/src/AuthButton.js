@@ -17,7 +17,7 @@ const AuthButton = (props) => {
       </button>
     </p>
   ) : (
-    <p>You are not logged in.</p>
+    <p>Please login with: teset@test.com, password: test</p>
   );
 };
 
