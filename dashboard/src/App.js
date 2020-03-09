@@ -11,10 +11,10 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import LoginPage from './Login';
-import Nav from './Nav';
-import NotFound from './NotFound';
-import PrivateRoute from './PrivateRouter';
+import LoginPage from './components/Login';
+import Nav from './components/Nav';
+import NotFound from './components/NotFound';
+import PrivateRoute from './components/PrivateRouter';
 
 class App extends Component {
   constructor(props) {
@@ -24,17 +24,18 @@ class App extends Component {
       lineOption1: {},
       lineOption2: {},
       data: {},
-      loggedIn: false,
       isAuthenticated: false
     };
     // this.name = 'test';
     this.email = 'test@test.com';
     this.password = 'test';
   }
-  authenticate = () => {
-    this.setState({
-      isAuthenticated: true
-    });
+  authenticate = ({ email, password }) => {
+    if (email === this.email && password === this.password) {
+      this.setState({
+        isAuthenticated: true
+      });
+    }
   };
   signout = () => {
     this.setState({
