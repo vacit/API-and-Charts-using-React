@@ -28,7 +28,7 @@ class App extends Component {
       lineOption1: {},
       lineOption2: {},
       data: {},
-      isAuthenticated: true, //fixme
+      isAuthenticated: false, 
       tableTitles: {},
       loading: 'initial',
       dataByTitels: {}
