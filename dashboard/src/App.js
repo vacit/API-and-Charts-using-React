@@ -103,11 +103,10 @@ class App extends Component {
     const pieOption = this.getPieOption(uniqueNames, uniqueCount);
     let tableTitles = data.tableTitles.map((title, i) => {
       let dataObj = {
-       
-        value:title,
-        label:title
+        value: title,
+        label: title
       };
-      return dataObj
+      return dataObj;
     });
     // console.log(tableTitles)
     //#region setState
@@ -207,9 +206,7 @@ class App extends Component {
             </Route>
 
             <PrivateRoute authObj={authObj} path='/piechart'>
-              <SelectMenu
-                tableTitles={this.state.tableTitles}
-              />
+              <SelectMenu tableTitles={this.state.tableTitles} />
               <PieChart {...this.state.pieOption} />
             </PrivateRoute>
 

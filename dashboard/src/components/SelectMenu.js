@@ -40,6 +40,8 @@ class SelectMenu extends React.Component {
     return (
       <div className='bg-primary px-4 py-2'>
         <form  onSubmit={this.handleSubmit}>
+        <label className=' p-1 text-light'>choose the columns you want to show</label>
+
           <Select className=' p-1 '
             value={selectedOption}
             onChange={this.handleChange}
