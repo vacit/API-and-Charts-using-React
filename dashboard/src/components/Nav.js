@@ -22,9 +22,7 @@ function Nav(props) {
       <Link className='nav-link ' to={'/linechart2'}>
         Line Chart Two
       </Link>
-      <AuthButton 
-        authObj={authObj}
-      />
+      <AuthButton authObj={authObj} />
     </nav>
   );
 }

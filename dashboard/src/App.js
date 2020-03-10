@@ -15,6 +15,7 @@ import LoginPage from './components/Login';
 import Nav from './components/Nav';
 import NotFound from './components/NotFound';
 import PrivateRoute from './components/PrivateRouter';
+import SelectMenu from './components/SelectMenu';
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +25,9 @@ class App extends Component {
       lineOption1: {},
       lineOption2: {},
       data: {},
-      isAuthenticated: false
+      isAuthenticated: true,
+      tableTitles: {},
+      loading: 'initial'
     };
     // this.name = 'test';
     this.email = 'test@test.com';
@@ -89,18 +92,27 @@ class App extends Component {
       selected
     };
   };
-
-  componentDidMount() {
-    getData('hotelname,baseprice,commentcount').then(data => {
-      const names = data.result.hotelname;
-      const basePrice = data.result.baseprice;
-      const commentCount = data.result.commentcount;
-      const { uniqueNames, uniqueCount } = this.getDistribution(names);
-      // console.log(names, basePrice, uniqueCount, data)
-      const pieOption = this.getPieOption(uniqueNames, uniqueCount);
-      //   console.log(pieOption);
-      //#region setState
-      this.setState({
+  async componentDidMount() {
+    this.setState({ loading: 'true' });
+    const data = await getData('hotelname,baseprice,commentcount');
+    const names = data.result.hotelname;
+    const basePrice = data.result.baseprice;
+    const commentCount = data.result.commentcount;
+    const { uniqueNames, uniqueCount } = this.getDistribution(names);
+    // console.log(names, basePrice, uniqueCount, data)
+    const pieOption = this.getPieOption(uniqueNames, uniqueCount);
+    let tableTitles = data.tableTitles.map((title, i) => {
+      let dataObj = {
+       
+        value:title,
+        label:title
+      };
+      return dataObj
+    });
+    // console.log(tableTitles)
+    //#region setState
+    this.setState(
+      {
         pieOption: {
           ...pieBaseObj,
           legend: {
@@ -153,11 +165,14 @@ class App extends Component {
             }
           ]
         },
-
-        data
-      });
-      //#endregion
-    });
+        loading: 'false',
+        data,
+        tableTitles
+      }
+      // ,
+      // () => console.log(data.tableTitles)
+    );
+    //#endregion
   }
 
   render() {
@@ -166,6 +181,18 @@ class App extends Component {
       authenticate: this.authenticate,
       signout: this.signout
     };
+    if (this.state.loading === 'initial') {
+      return <h2>Intializing...</h2>;
+    }
+    if (this.state.loading === 'true') {
+      return (
+        <div>
+          <h2>Loading...</h2>
+          <div className=' m-5 p-5 spinner-grow text-success'></div>
+        </div>
+      );
+    }
+    // console.log('App render', typeof this.state.data.tableTitles);
     return (
       <Router>
         <div className='App'>
@@ -180,6 +207,9 @@ class App extends Component {
             </Route>
 
             <PrivateRoute authObj={authObj} path='/piechart'>
+              <SelectMenu
+                tableTitles={this.state.tableTitles}
+              />
               <PieChart {...this.state.pieOption} />
             </PrivateRoute>
 

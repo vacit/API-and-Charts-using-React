@@ -15,11 +15,12 @@ const config = {
 };
 
 const router = express.Router();
-
+console.time('readFilePapa')
 let papa;
 fs.readFile("./hotellist.csv", "utf8", (error, data) => {
     papa = PaParser.parse(data, config);
 });
+console.timeEnd('readFilePapa')
 
 
 

@@ -48,7 +48,7 @@ const LoginPage = props => {
         </small>
       </div>
 
-      <form className='mx-1 my-4 form-block ' onSubmit={handleSubmit}>
+      <form className='mx-1 my-4 form-block' onSubmit={handleSubmit}>
         <div className='form-group '>
           <label className=''>
             Email
