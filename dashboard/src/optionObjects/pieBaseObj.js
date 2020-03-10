@@ -11,7 +11,6 @@ export const pieBaseObj = {
     formatter: '{b} : ({d}%) <br/> Comment : {c} '
   },
   legend: {
-
     type: 'scroll',
     orient: 'vertical',
     top: '54%',
@@ -20,7 +19,7 @@ export const pieBaseObj = {
     // right: '50%',
     // width: 'auto',
     // height: '300',
-    icon:'circle',
+    icon: 'circle',
     align: 'left',
     // selectedMode:'false',
     data: [],
@@ -29,10 +28,10 @@ export const pieBaseObj = {
   },
   series: [
     {
-        label: {
-            alignTo: 'labelLine',
-            margin:'10%'
-        },
+      label: {
+        alignTo: 'labelLine',
+        margin: '10%'
+      },
       type: 'pie',
       radius: '38%',
       center: ['50%', '30%'],

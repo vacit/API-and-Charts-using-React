@@ -5,29 +5,33 @@ import { getData } from './helpers';
 import PieChart from './charts/PieChart';
 import { pieBaseObj } from './optionObjects/pieBaseObj';
 import { lineBaseObj } from './optionObjects/lineBaseObj';
+import LoginPage from './components/Login';
+import Nav from './components/Nav';
+import NotFound from './components/NotFound';
+import PrivateRoute from './components/PrivateRouter';
+import SelectMenu from './components/SelectMenu';
+import ChartByTitle from './charts/ChartByTitle';
+import chartObj from './optionObjects/chartObj';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect
 } from 'react-router-dom';
-import LoginPage from './components/Login';
-import Nav from './components/Nav';
-import NotFound from './components/NotFound';
-import PrivateRoute from './components/PrivateRouter';
-import SelectMenu from './components/SelectMenu';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      chartObj: {},
       pieOption: {},
       lineOption1: {},
       lineOption2: {},
       data: {},
-      isAuthenticated: false,
+      isAuthenticated: true, //fixme
       tableTitles: {},
-      loading: 'initial'
+      loading: 'initial',
+      dataByTitels: {}
     };
     // this.name = 'test';
     this.email = 'test@test.com';
@@ -173,8 +177,100 @@ class App extends Component {
     );
     //#endregion
   }
+  getDataByTitles = async columnsNames => {
+    this.setState({ loading: 'true' });
+    const data = await getData(columnsNames);
+    await console.log(data);
+
+
+      const result = data.result;
+
+      const keys = Object.keys(result);
+
+      // console.log('result', result);
+      // console.log('key0', keys[0]);
+      // console.log('typeOf keys0', typeof keys[0]);
+      const result0 = result[keys[0]];
+      const result1 = result[keys[1]];
+      // console.log('d0--d1', data0, data1);
+
+    this.setState({
+      chartObj: {
+        color: ['#2bab22'],
+        legend: {
+           data: result1
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: ' {b}:</br>  {c}'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          splitLine: {
+            show: true
+          },
+          axisLabel: {
+            formatter: '{value}'
+          }
+        },
+        yAxis: {
+          type: 'category',
+          axisLine: { onZero: false },
+          axisLabel: {
+            formatter: '{value}'
+          },
+          boundaryGap: true,
+          data: result0
+        },
+        graphic: [
+          {
+            type: 'image',
+            id: 'logo',
+            right: 20,
+            top: 20,
+            z: -10,
+            bounding: 'raw',
+            origin: [75, 75]
+          },
+          {
+            type: 'group',
+            left: '10%',
+            top: 'center',
+            children: [
+            
+         
+            ]
+          }
+        ],
+        series: [
+          {
+            name: 'series name',
+            type: 'bar',
+            smooth: true,
+            barCategoryGap: 25,
+            lineStyle: {
+              width: 10,
+              shadowColor: 'rgba(200,0,0,0.4)',
+              shadowBlur: 10,
+              shadowOffsetY: 10
+            },
+            data: result1
+          }
+        ]
+      },
+      dataByTitels: data,
+      loading: false
+    });
+  };
 
   render() {
+    // this.getDataByTitles('hotelname,commentcount');
     const authObj = {
       isAuthenticated: this.state.isAuthenticated,
       authenticate: this.authenticate,
@@ -205,8 +301,15 @@ class App extends Component {
               <LoginPage authObj={authObj} />
             </Route>
 
+            <PrivateRoute authObj={authObj} path='/home'>
+              <SelectMenu
+                getDataByTitles={this.getDataByTitles}
+                tableTitles={this.state.tableTitles}
+              />
+              <ChartByTitle option={this.state.chartObj} />
+            </PrivateRoute>
+
             <PrivateRoute authObj={authObj} path='/piechart'>
-              <SelectMenu tableTitles={this.state.tableTitles} />
               <PieChart {...this.state.pieOption} />
             </PrivateRoute>
 

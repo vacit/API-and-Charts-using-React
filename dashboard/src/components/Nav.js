@@ -13,6 +13,12 @@ function Nav(props) {
       align-items-center'
       style={{ backgroundColor: 'rgb(150,200,100)' }}
     >
+      <Link className='nav-link' to={'/home'}>
+        Home
+      </Link>
+      {/* <Link className='nav-link' to={'/login'}>
+        Login
+      </Link> */}
       <Link className='nav-link' to={'/piechart'}>
         Pie Chart
       </Link>

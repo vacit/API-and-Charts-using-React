@@ -8,7 +8,7 @@ const LoginPage = props => {
 
   const authObj = { ...props.authObj };
 
-  let { from } = location.state || { from: { pathname: '/piechart' } };
+  let { from } = location.state || { from: { pathname: '/home' } };
 
   const handleInputChange = event => {
     const target = event.target;
